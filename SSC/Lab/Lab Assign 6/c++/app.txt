@@ -1,0 +1,81 @@
+%{
+#include<string.h>
+   int i,m;
+   struct symtab
+   {
+     char name[200];
+     char type[200];
+   }sym[20];
+%}
+
+A lex program consists of 3 parts:
+  a) Declaration
+  b) Transition Rules
+  c) Auxilary procedures
+
+ws	[\t ]
+digit	[0-9]
+alpha	[a-zA-Z]
+id	{alpha}({alpha}|{digit})*
+
+1. #include{ws}*<{id}\.h>	-- Header file
+
+2. #define{ws}+{id}{ws}+({alpha}|{digit})*    -- Macro
+
+3. if | case | else | while | do | switch{ws}*\(.*\) | for		-- Keyword
+
+4. void{ws}+{id}{ws}*\(({ws}*{id}{ws}*,)*({ws}*{id}{ws}*)?\)	-- Function with return type void
+   int{ws}+{id}{ws}*\(({ws}*{id}{ws}*,)*({ws}*{id}{ws}*)?\)     -- Function with return type int
+   float{ws}+{id}{ws}*\(({ws}*{id}{ws}*,)*({ws}*{id}{ws}*)?\)   -- Function with return type float
+   char{ws}+{id}{ws}*\(({ws}*{id}{ws}*,)*({ws}*{id}{ws}*)?\)    -- Function with return type char
+   double{ws}+{id}{ws}*\(({ws}*{id}{ws}*,)*({ws}*{id}{ws}*)?\)  -- Function with return type double
+
+5. [<>]=?    -- Relational operator
+
+6. int{ws}+  -- integer
+   float{ws}+   -- float 
+   char{ws}+	-- character
+   double{ws}+  -- double
+
+7. {id}"["{digit}*"]"  --Array
+
+8. vector<int>{id}    -- vector of integer
+   vector<char>{id}    -- vector of char
+   vector<floar>{id}    -- vector of float
+   vector<double>{id}    -- vector of double
+
+9. {id}     -- Identifier
+
+10. [{(]  -- opening brace
+    [})]  -- closing brace
+
+
+
+
+
+
+
+%%
+int main()
+{
+
+		printf("enter the string");
+yylex();
+
+
+ printf("\n\n\n\t--------------------\n");
+ printf("\tIndex\tSymbol name\t\t\tSymbol Type");
+ printf("\t\t\n--------------------------");
+
+ for(i=0;i<m;i++)
+ {
+   printf("\n\t%d",i+1);
+   printf("\t\t%s",sym[i].name);
+   printf("\t\t\t%s\n",sym[i].type);
+ }
+ yywrap();
+}
+
+extern int yywrap(){
+return 1;
+}
